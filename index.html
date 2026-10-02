@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruta Segura · Quiz inicial del SGCS BASC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem("rutaSegura-tema");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<style>
+:root{--fondo:#08131A;--panel:#0E1E27;--panel2:#132833;--linea:#1E3542;--tinta:#EAF3F5;--suave:#86A0AB;--neon:#3BE0C4;--neon2:#4FB8E8;--alerta:#FF6B5B;--oro:#F5C451;--hover:#16323D;--onneon:#06231E;
+--display:"Space Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--texto:"Inter",system-ui,sans-serif}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--fondo:#EEF3F5;--panel:#FFFFFF;--panel2:#F3F7F9;--linea:#D3DEE3;--tinta:#0E1E27;--suave:#4B6470;--neon:#0B8F7B;--neon2:#1F78B4;--alerta:#D2453A;--oro:#9A7300;--hover:#E6F4F1;--onneon:#FFFFFF}}
+:root[data-theme="light"]{--fondo:#EEF3F5;--panel:#FFFFFF;--panel2:#F3F7F9;--linea:#D3DEE3;--tinta:#0E1E27;--suave:#4B6470;--neon:#0B8F7B;--neon2:#1F78B4;--alerta:#D2453A;--oro:#9A7300;--hover:#E6F4F1;--onneon:#FFFFFF}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;padding:0;background:var(--fondo)}
+body{background-image:radial-gradient(90% 50% at 50% 0%,rgba(59,224,196,.10),transparent 60%);color:var(--tinta);font-family:var(--texto);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+.marco{max-width:640px;margin:0 auto;padding:18px 16px 60px}
+.oculto{display:none!important}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel);border:1px solid var(--linea);border-radius:12px;padding:11px 14px;margin-bottom:10px}
+.hud .bloque{display:flex;flex-direction:column;gap:3px}
+.hud .rot{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--suave);text-transform:uppercase}
+.hud .val{font-family:var(--display);font-weight:700;font-size:20px;line-height:1;letter-spacing:-.02em}
+#aciertosHud{color:var(--neon)}
+.brinca{animation:brinco .3s ease}
+@keyframes brinco{0%{transform:scale(1)}40%{transform:scale(1.22)}100%{transform:scale(1)}}
+.sellos{display:flex;gap:5px;margin-top:2px}
+.sellos i{width:12px;height:12px;border-radius:3px;background:var(--neon);display:block;transition:all .3s ease}
+.sellos i.ido{background:transparent;border:1px solid var(--alerta)}
+#rachaHud{color:var(--oro)}
+.sonido{background:none;border:1px solid var(--linea);color:var(--suave);border-radius:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:6px 8px;cursor:pointer}
+.sonido:hover{color:var(--tinta);border-color:var(--suave)}
+.ruta{margin-bottom:14px}
+.carril{position:relative;height:26px}
+.via{position:absolute;top:12px;left:0;right:0;height:2px;background:var(--linea);border-radius:2px}
+.avance{position:absolute;top:12px;left:0;height:2px;background:linear-gradient(90deg,var(--neon2),var(--neon));border-radius:2px;width:0;transition:width .45s cubic-bezier(.3,1,.4,1)}
+.hito{position:absolute;top:8px;width:10px;height:10px;border-radius:50%;background:var(--fondo);border:2px solid var(--linea);transform:translateX(-50%);transition:all .3s ease}
+.hito.pasado{border-color:var(--neon);background:var(--neon)}
+.hito.fallo{border-color:var(--alerta);background:var(--alerta)}
+.caja{position:absolute;top:2px;left:0;width:26px;height:22px;transform:translateX(-50%);transition:left .45s cubic-bezier(.3,1,.4,1)}
+.caja svg{display:block;filter:drop-shadow(0 0 8px rgba(59,224,196,.55))}
+.tramos{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--suave);text-transform:uppercase;margin-top:4px}
+.tramos span.activo{color:var(--neon)}
+.tarjeta{background:var(--panel);border:1px solid var(--linea);border-radius:16px;padding:24px 20px;animation:aparece .3s cubic-bezier(.2,.8,.3,1) both}
+@keyframes aparece{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tarjeta.sacude{animation:sacudir .4s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes sacudir{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+.reloj{height:4px;background:var(--linea);border-radius:3px;overflow:hidden;margin-bottom:18px}
+.reloj i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--neon),var(--neon2));border-radius:3px}
+.reloj.urgente i{background:var(--alerta)}
+.tema{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--neon);margin:0 0 10px}
+.pregunta{font-family:var(--display);font-weight:600;font-size:clamp(19px,4.4vw,24px);line-height:1.25;letter-spacing:-.015em;margin:0 0 18px}
+.ops{display:flex;flex-direction:column;gap:8px}
+.op{display:flex;align-items:flex-start;gap:11px;text-align:left;width:100%;background:var(--panel2);border:1px solid var(--linea);border-radius:11px;padding:13px 14px;color:var(--tinta);font-family:var(--texto);font-size:15px;line-height:1.4;cursor:pointer;transition:border-color .12s ease,background .12s ease,transform .1s ease}
+.op:hover:not(:disabled){border-color:var(--neon);background:var(--hover)}
+.op:active:not(:disabled){transform:scale(.99)}
+.op .k{font-family:var(--mono);font-size:11px;color:var(--suave);border:1px solid var(--linea);border-radius:6px;width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.op.bien{border-color:var(--neon);background:rgba(59,224,196,.13)}
+.op.bien .k{background:var(--neon);color:var(--onneon);border-color:var(--neon)}
+.op.mal{border-color:var(--alerta);background:rgba(255,107,91,.12)}
+.op.mal .k{background:var(--alerta);color:#fff;border-color:var(--alerta)}
+.op.gris{opacity:.4}
+.op:disabled{cursor:default}
+.flota{position:fixed;left:50%;top:34%;transform:translateX(-50%);font-family:var(--display);font-weight:700;font-size:40px;color:var(--neon);pointer-events:none;opacity:0;z-index:40;text-shadow:0 0 24px rgba(59,224,196,.5);white-space:nowrap}
+.flota.va{animation:flotar .9s ease-out forwards}
+@keyframes flotar{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}25%{opacity:1;transform:translate(-50%,-6px) scale(1.05)}100%{opacity:0;transform:translate(-50%,-52px) scale(1)}}
+.flota.rojo{color:var(--alerta);text-shadow:0 0 24px rgba(255,107,91,.5)}
+.golpe{margin-top:18px;border-left:2px solid var(--alerta);padding-left:14px}
+.golpe .tit{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--alerta);margin:0 0 5px}
+.golpe p{margin:0;color:var(--suave);font-size:14.5px;line-height:1.55}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--display);font-weight:600;font-size:16px;background:var(--neon);color:var(--onneon);border:1px solid var(--neon);padding:12px 24px;border-radius:999px;cursor:pointer;transition:transform .1s ease,opacity .15s ease}
+.btn:hover{opacity:.88}.btn:active{transform:scale(.98)}
+.btn.linea{background:transparent;color:var(--tinta);border-color:var(--linea)}
+.btn.linea:hover{border-color:var(--suave);opacity:1}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-visible,.op:focus-visible,.sonido:focus-visible,input:focus-visible{outline:2px solid var(--neon2);outline-offset:2px}
+.fila-btn{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:22px}
+.titulo{font-family:var(--display);font-weight:700;font-size:clamp(34px,9vw,52px);line-height:.98;letter-spacing:-.03em;margin:0 0 6px}
+.titulo em{font-style:normal;display:block;color:var(--neon)}
+.sub{color:var(--suave);margin:0 0 20px;font-size:16px;max-width:48ch}
+.premio{display:flex;gap:14px;align-items:center;background:rgba(245,196,81,.12);border:1px solid rgba(245,196,81,.45);border-radius:12px;padding:14px 16px;margin:0 0 20px}
+.premio .n{font-family:var(--display);font-weight:700;font-size:30px;color:var(--oro);line-height:1}
+.premio p{margin:0;font-size:14.5px}
+.reglas{list-style:none;padding:0;margin:0 0 22px;display:flex;flex-direction:column;gap:9px}
+.reglas li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px}
+.reglas li span:first-child{font-family:var(--mono);font-size:14px;color:var(--neon);min-width:20px;text-align:center;padding-top:1px}
+label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--suave);margin-bottom:7px}
+input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--linea);border-radius:10px;background:var(--panel2);color:var(--tinta);font-family:var(--texto);font-size:16px}
+input[type=text]:focus{outline:none;border-color:var(--neon)}
+input[type=text]::placeholder{color:var(--suave);opacity:.7}
+.marcas{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--suave);margin:14px 0 0}
+.marcas b{color:var(--oro);font-weight:500}
+.desenlace{font-family:var(--display);font-weight:700;font-size:clamp(26px,6.5vw,36px);letter-spacing:-.025em;line-height:1.05;margin:0 0 6px}
+.desenlace.ok{color:var(--neon)}.desenlace.med{color:var(--oro)}.desenlace.no{color:var(--alerta)}
+.lamina{border-radius:12px;overflow:hidden;background:#06121A;border:1px solid var(--linea);margin:18px 0 4px;position:relative;min-height:110px}
+.lamina img{display:block;width:100%;height:auto;opacity:0;transition:opacity .5s ease}
+.lamina img.on{opacity:1}
+.lamina .cargando{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#86A0AB;text-transform:uppercase}
+.datos{display:flex;flex-wrap:wrap;gap:16px 26px;margin:16px 0 0}
+.datos div{display:flex;flex-direction:column;gap:2px}
+.datos .rot{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--suave)}
+.datos .num{font-family:var(--display);font-weight:600;font-size:19px}
+.rangos{margin-top:24px;border-top:1px solid var(--linea);padding-top:14px}
+.rangos .r{display:flex;align-items:center;gap:12px;padding:8px 11px;border-radius:9px;font-size:14px;color:var(--suave)}
+.rangos .r b{flex:1;font-weight:500;color:var(--tinta)}
+.rangos .r i{font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.08em;min-width:78px}
+.rangos .r.mio{background:rgba(59,224,196,.1);color:var(--neon)}
+.rangos .r.mio b{color:var(--neon)}
+.repaso{margin-top:24px;border-top:1px solid var(--linea)}
+.repaso h3{font-size:14.5px;font-weight:600;margin:0 0 7px;line-height:1.4}
+.repaso article{padding:15px 0;border-bottom:1px solid var(--linea)}
+.repaso .l{font-size:14px;margin:3px 0;color:var(--suave)}
+.repaso .l b{color:var(--neon);font-weight:500}
+.repaso .x{color:var(--suave);font-size:14px;margin:8px 0 0;line-height:1.55}
+.rot-sec{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--suave);margin:16px 0 6px}
+.pie{margin-top:26px;text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--suave);line-height:2;text-transform:uppercase}
+.pie b{color:var(--tinta);font-weight:500}
+.pie button{background:none;border:1px solid var(--linea);color:var(--suave);border-radius:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;padding:6px 10px;cursor:pointer;margin-top:6px;text-transform:uppercase}
+.aviso{font-family:var(--mono);font-size:12px;color:var(--neon);letter-spacing:.06em}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:470px){.tarjeta{padding:20px 16px}.hud{padding:10px 12px}.hud .val{font-size:18px}.fila-btn .btn{flex:1 1 auto}}
+</style>
+</head>
+<body>
+<div class="marco">
+  <div class="hud oculto" id="hud">
+    <div class="bloque"><span class="rot">Aciertos</span><span class="val" id="aciertosHud">0</span></div>
+    <div class="bloque"><span class="rot">Sellos</span><span class="sellos" id="sellos"></span></div>
+    <div class="bloque"><span class="rot">Racha</span><span class="val" id="rachaHud">0</span></div>
+    <button class="sonido" id="btnSonido" type="button" aria-label="Activar o silenciar el sonido">SONIDO ON</button>
+  </div>
+  <div class="ruta oculto" id="ruta">
+    <div class="carril" id="carril"><div class="via"></div><div class="avance" id="avance"></div>
+      <div class="caja" id="caja"><svg width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="1" y="4" width="19" height="13" rx="1.5" fill="#3BE0C4" fill-opacity=".18" stroke="#3BE0C4" stroke-width="1.5"/>
+        <path d="M6 4v13M11 4v13M15.5 4v13" stroke="#3BE0C4" stroke-width="1" opacity=".55"/>
+        <circle cx="6" cy="18.5" r="2.4" fill="#08131A" stroke="#3BE0C4" stroke-width="1.4"/><circle cx="16" cy="18.5" r="2.4" fill="#08131A" stroke="#3BE0C4" stroke-width="1.4"/></svg></div>
+    </div>
+    <div class="tramos" id="tramos"></div>
+  </div>
+
+  <section class="tarjeta" id="portada">
+    <p class="tema">Quiz inicial · Curso de Auditor Interno BASC</p>
+    <h1 class="titulo">Ruta<em>Segura</em></h1>
+    <p class="sub">Antes de jugar, mira el video de Introducción al SGCS BASC en Classroom. Tu embarque sale de planta: cada respuesta lo mueve un tramo y cada error rompe un sello.</p>
+    <div class="premio"><span class="n">+5</span><p><b>Puntos extra para el curso</b> si contestas bien al menos el 80% de las preguntas (<span id="minimo"></span>).</p></div>
+    <ul class="reglas">
+      <li><span>◷</span><span>Cada pregunta tiene tiempo límite. Si se acaba, cuenta como error.</span></li>
+      <li><span>▣</span><span>Tu carga sale con tres sellos y cada error rompe uno. Si se rompen los tres, la carga queda detenida y termina tu ruta.</span></li>
+      <li><span>%</span><span>Son 12 preguntas. Tu resultado es el porcentaje de respuestas correctas sobre las 12.</span></li>
+      <li><span>⌨</span><span>En computadora puedes responder con las teclas 1, 2, 3 y 4.</span></li>
+    </ul>
+    <label for="nombre">Tu nombre completo</label>
+    <input type="text" id="nombre" autocomplete="name" placeholder="Nombre y apellido">
+    <p class="marcas oculto" id="marcas"></p>
+    <div class="fila-btn"><button class="btn" id="btnJugar" type="button" disabled>Iniciar ruta</button></div>
+  </section>
+
+  <section class="tarjeta oculto" id="juego">
+    <div class="reloj" id="reloj"><i id="relojBarra"></i></div>
+    <p class="tema" id="tema"></p>
+    <h2 class="pregunta" id="pregunta"></h2>
+    <div class="ops" id="ops"></div>
+    <div class="golpe oculto" id="golpe"><p class="tit" id="golpeTit">Sello roto</p><p id="golpeTexto"></p></div>
+    <div class="fila-btn"><button class="btn oculto" id="btnSeguir" type="button">Continuar</button></div>
+  </section>
+
+  <section class="tarjeta oculto" id="final">
+    <p class="tema">Fin de la ruta</p>
+    <h2 class="desenlace" id="desenlace"></h2>
+    <p class="sub" id="finalTexto" style="margin-bottom:0"></p>
+    <div class="lamina"><div class="cargando" id="cargando">Generando tarjeta…</div><img id="imgFinal" alt="Tarjeta con tu resultado"></div>
+    <div class="datos" id="datos"></div>
+    <p class="marcas oculto" id="marcasFinal"></p>
+    <div class="fila-btn">
+      <button class="btn" id="btnBajar" type="button">Descargar tarjeta</button>
+      <button class="btn linea oculto" id="btnCompartir" type="button">Compartir</button>
+      <button class="btn linea" id="btnOtra" type="button">Intentar de nuevo</button>
+      <span class="aviso oculto" id="aviso"></span>
+    </div>
+    <p class="sub" style="font-size:14px;margin:14px 0 0">Sube la tarjeta a la tarea de Classroom como evidencia de tu resultado.</p>
+    <div class="rangos"><p class="rot-sec">Resultados posibles</p><div id="listaRangos"></div></div>
+    <div class="repaso" id="repaso"></div>
+  </section>
+
+  <p class="pie">Introducción al SGCS BASC · Norma y Estándares V6-2022<br>Curso de Auditor Interno BASC<br><b>Desarrollado por LOWRISK · <span style="text-transform:none">mauricio@lowrisk.com.mx</span> · 33 3578 4983</b><br><button type="button" id="btnTema"></button></p>
+</div>
+<div class="flota" id="flota" aria-hidden="true"></div>
+<canvas id="lienzo" width="1080" height="1080" style="display:none"></canvas>
+
+<script>
+/* ===== AJUSTES ===== */
+const SELLOS = 3;
+const UMBRAL_BONO = 80;      // se gana el bono con este porcentaje o más
+const PUNTOS_BONO = 5;
+const TRAMOS = ["Planta","Patio","Aduana","Puerto"];
+const RANGOS = [
+  {min:80, rango:"80–100%", nombre:"Ruta segura · +5 puntos", clase:"ok"},
+  {min:70, rango:"70–79%", nombre:"Ruta con observaciones", clase:"med"},
+  {min:60, rango:"60–69%", nombre:"Carga en revisión", clase:"med"},
+  {min:0, rango:"0–59%", nombre:"Carga retenida", clase:"no"}];
+
+/* ===== BANCO: Introducción al SGCS BASC =====
+   p pregunta · o opciones (la primera es la correcta; se revuelven) · e explicación · t tema */
+const BANCO = [
+ {t:"BASC", p:"¿Qué significan las siglas BASC?", o:["Business Alliance for Secure Commerce","Business Association for Safe Cargo","Basic Alliance for Supply Chain","Border and Air Security Control"], e:"BASC es Business Alliance for Secure Commerce."},
+ {t:"BASC", p:"¿Cuál es la misión de BASC?", o:["Facilitar el comercio seguro en la cadena de suministro internacional","Reducir los aranceles del comercio exterior","Sancionar a las empresas que incumplen en aduana","Certificar exclusivamente a empresas de transporte"], e:"Su misión es facilitar el comercio seguro en la cadena de suministro internacional."},
+ {t:"BASC", p:"¿Qué significa SGCS?", o:["Sistema de Gestión en Control y Seguridad","Sistema General de Certificación y Supervisión","Servicio de Gestión de Carga Segura","Sistema de Garantía de Comercio Seguro"], e:"SGCS es el Sistema de Gestión en Control y Seguridad que implementa cada empresa."},
+ {t:"Cadena de suministro", p:"¿Cuál es la diferencia entre la cadena de suministro y la cadena logística?", o:["La cadena logística es la parte de la cadena de suministro que mueve, almacena y transporta la carga","Son lo mismo con distinto nombre","La cadena logística es más amplia e incluye a todos los proveedores","La cadena de suministro solo incluye el transporte internacional"], e:"La cadena de suministro va de la materia prima al usuario final; la logística es el tramo donde la carga se mueve, almacena y transporta."},
+ {t:"Cadena de suministro", p:"¿Por qué es importante identificar el rol de tu empresa en la cadena de suministro?", o:["Porque define qué Estándar BASC le aplica y qué controles necesita","Porque determina el costo de la membresía BASC","Porque solo las empresas exportadoras pueden certificarse","Porque así se elige al auditor de la certificación"], e:"Según su relación con la carga, a la empresa le aplica el Estándar 6.0.1, 6.0.2 o 6.0.3."},
+ {t:"Norma", p:"¿Cómo se integra el SGCS BASC?", o:["Con la Norma BASC y el Estándar que corresponde según la relación con la carga","Solo con la Norma BASC","Con los tres Estándares, sin importar el giro","Con la norma ISO 28000 y un reglamento interno"], e:"Toda empresa cumple la Norma, que es el marco general, más un Estándar según su relación con la carga."},
+ {t:"Norma", p:"¿A qué empresas aplica la Norma BASC?", o:["A todas las empresas que implementan el SGCS","Solo a las empresas exportadoras","Solo a las que tienen relación directa con la carga","Solo a los agentes aduanales"], e:"La Norma es el marco general y aplica a todas las empresas."},
+ {t:"Norma", p:"¿Cuál de estos es un enfoque de la Norma BASC?", o:["La gestión de riesgos","La auditoría financiera","El control de calidad del producto","La planeación fiscal"], e:"La Norma se basa en el enfoque de procesos, la gestión de riesgos y la mejora continua."},
+ {t:"Estándares", p:"Un transportista lleva contenedores de la planta al puerto. ¿Qué Estándar le aplica?", o:["6.0.1","6.0.2","6.0.3","Ninguno, solo la Norma"], e:"Maneja directamente la carga y las unidades de transporte: 6.0.1."},
+ {t:"Estándares", p:"Un agente aduanal gestiona la documentación de la carga. ¿Qué Estándar le aplica?", o:["6.0.2","6.0.1","6.0.3","Ninguno, solo la Norma"], e:"Su relación con la carga es indirecta, a través de la información y los documentos: 6.0.2."},
+ {t:"Estándares", p:"Una empresa de reclutamiento de personal, sin contacto con la carga, ¿qué Estándar le aplica?", o:["6.0.3","6.0.1","6.0.2","Ninguno: no puede certificarse"], e:"Empresas sin relación con la carga, como reclutamiento, uniformes o instalación de CCTV: 6.0.3."},
+ {t:"Estándares", p:"¿Qué capítulo aparece solo en el Estándar 6.0.1?", o:["Seguridad de las unidades de carga y de transporte de carga","Requisitos de asociados de negocio","Seguridad de la información","Control de acceso y seguridad física"], e:"Solo quien maneja directamente las unidades necesita ese capítulo; los demás aparecen en los tres Estándares."}];
+
+/* ===== MOTOR ===== */
+const $=id=>document.getElementById(id);
+const LETRAS=["1","2","3","4"];
+let ruta=[],paso=0,sellos=SELLOS,racha=0,mejorRacha=0,correctas=0,fallos=[],marcasPaso=[],t0=0,temporizador=null,restante=0,limite=0,activa=false;
+let sonidoOn=true,audio=null,blobActual=null,archivoActual="",intentoNum=null,fechaFin=null;
+const revolver=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const minimoBono=n=>Math.ceil(n*UMBRAL_BONO/100-1e-9);
+const pct=()=>ruta.length?Math.round(correctas/ruta.length*1000)/10:0;
+const fmtPct=v=>(Number.isInteger(v)?v:v.toFixed(1))+"%";
+const CLAVE="rutaSeguraSGCS.v2";
+function leerHist(){try{const c=localStorage.getItem(CLAVE);return c?JSON.parse(c):{intentos:0,mejor:null,primero:null}}catch(e){return null}}
+function guardarHist(h){try{localStorage.setItem(CLAVE,JSON.stringify(h))}catch(e){}}
+function bip(frecs,dur){if(!sonidoOn)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();frecs.forEach((f,i)=>{const o=audio.createOscillator(),g=audio.createGain();o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(.0001,audio.currentTime+i*dur);g.gain.exponentialRampToValueAtTime(.14,audio.currentTime+i*dur+.01);g.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+i*dur+dur);o.connect(g);g.connect(audio.destination);o.start(audio.currentTime+i*dur);o.stop(audio.currentTime+i*dur+dur+.02)})}catch(e){}}
+const sonBien=()=>bip([660,880],.09),sonMal=()=>bip([180,120],.16),sonFin=()=>bip([520,400,300,220],.13),sonMeta=()=>bip([523,659,784,1047],.12);
+function ver(id){["portada","juego","final"].forEach(p=>$(p).classList.toggle("oculto",p!==id));const j=id==="juego";$("hud").classList.toggle("oculto",!j);$("ruta").classList.toggle("oculto",!j)}
+
+function iniciar(){
+  if(!$("nombre").value.trim()){$("nombre").focus();return}
+  ruta=revolver(BANCO).map(q=>{const buena=q.o[0],ops=revolver(q.o);return{t:q.t,p:q.p,e:q.e,ops,c:ops.indexOf(buena),buena}});
+  paso=0;sellos=SELLOS;racha=0;mejorRacha=0;correctas=0;fallos=[];marcasPaso=[];blobActual=null;intentoNum=null;t0=Date.now();
+  $("aciertosHud").textContent="0";$("rachaHud").textContent="0";
+  const cont=$("sellos");cont.innerHTML="";for(let i=0;i<SELLOS;i++)cont.appendChild(document.createElement("i"));
+  const tr=$("tramos");tr.innerHTML="";TRAMOS.forEach(t=>{const s=document.createElement("span");s.textContent=t;tr.appendChild(s)});
+  const carril=$("carril");carril.querySelectorAll(".hito").forEach(h=>h.remove());
+  for(let i=1;i<=ruta.length;i++){const h=document.createElement("div");h.className="hito";h.style.left=(i/ruta.length*100)+"%";carril.appendChild(h)}
+  moverCaja(0);ver("juego");pintar();
+}
+function moverCaja(n){
+  const total=ruta.length,p=n/total*100;$("avance").style.width=p+"%";$("caja").style.left=p+"%";
+  $("carril").querySelectorAll(".hito").forEach((h,i)=>{h.classList.toggle("pasado",i<n&&marcasPaso[i]===true);h.classList.toggle("fallo",i<n&&marcasPaso[i]===false)});
+  const ta=Math.min(TRAMOS.length-1,Math.floor(n/(total/TRAMOS.length)));$("tramos").querySelectorAll("span").forEach((s,i)=>s.classList.toggle("activo",i===ta));
+}
+function pintar(){
+  const q=ruta[paso];activa=true;$("golpe").classList.add("oculto");$("btnSeguir").classList.add("oculto");
+  $("tema").textContent=`${q.t} · Pregunta ${paso+1} de ${ruta.length}`;$("pregunta").textContent=q.p;
+  const cont=$("ops");cont.innerHTML="";
+  q.ops.forEach((txt,i)=>{const b=document.createElement("button");b.className="op";b.type="button";b.innerHTML=`<span class="k">${LETRAS[i]}</span><span></span>`;b.lastChild.textContent=txt;b.addEventListener("click",()=>elegir(i));cont.appendChild(b)});
+  const palabras=(q.p+" "+q.ops.join(" ")).split(/\s+/).length;
+  limite=Math.max(15,Math.min(32,Math.round(9+palabras*.3)))+8;restante=limite;
+  const barra=$("relojBarra");$("reloj").classList.remove("urgente");barra.style.transition="none";barra.style.width="100%";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{barra.style.transition=`width ${limite}s linear`;barra.style.width="0%"}));
+  clearInterval(temporizador);temporizador=setInterval(()=>{restante-=.1;if(restante<=limite*.3)$("reloj").classList.add("urgente");if(restante<=0){clearInterval(temporizador);elegir(-1)}},100);
+}
+function flotar(txt,rojo){const f=$("flota");f.textContent=txt;f.className="flota"+(rojo?" rojo":"");void f.offsetWidth;f.classList.add("va")}
+function brinca(id){const e=$(id);e.classList.remove("brinca");void e.offsetWidth;e.classList.add("brinca")}
+function elegir(i){
+  if(!activa)return;activa=false;clearInterval(temporizador);
+  const bar=$("relojBarra");bar.style.transition="none";bar.style.width=(bar.getBoundingClientRect().width/$("reloj").getBoundingClientRect().width*100)+"%";
+  const q=ruta[paso],bien=i===q.c,btns=$("ops").children;
+  for(let k=0;k<btns.length;k++){btns[k].disabled=true;if(k===q.c)btns[k].classList.add("bien");else if(k===i)btns[k].classList.add("mal");else btns[k].classList.add("gris")}
+  marcasPaso[paso]=bien;
+  if(bien){correctas++;racha++;mejorRacha=Math.max(mejorRacha,racha);$("aciertosHud").textContent=correctas;$("rachaHud").textContent=racha;brinca("aciertosHud");flotar("¡Correcto!",false);sonBien();moverCaja(paso+1);setTimeout(avanzar,650)}
+  else{
+    racha=0;$("rachaHud").textContent="0";
+    sellos--;{const m=$("sellos").children;if(m[sellos])m[sellos].classList.add("ido")}
+    fallos.push({p:q.p,buena:q.buena,tuya:i===-1?"Se acabó el tiempo":q.ops[i],e:q.e});
+    flotar(i===-1?"¡Tiempo!":"Sello roto",true);sonMal();moverCaja(paso+1);
+    $("juego").classList.remove("sacude");void $("juego").offsetWidth;$("juego").classList.add("sacude");
+    $("golpeTit").textContent=(i===-1?"Se acabó el tiempo · ":"")+(sellos>0?"Sello roto":"Tercer sello roto · Carga detenida");
+    $("golpeTexto").textContent=q.e;$("golpe").classList.remove("oculto");
+    $("btnSeguir").textContent=(sellos<=0||paso>=ruta.length-1)?"Ver resultado":"Continuar";$("btnSeguir").classList.remove("oculto");$("btnSeguir").focus({preventScroll:true});
+  }
+}
+function avanzar(){if(sellos<=0){terminar(true);return}if(paso<ruta.length-1){paso++;pintar()}else terminar(false)}
+function rangoDe(v){return RANGOS.find(r=>v>=r.min)}
+let detenido=false;
+function terminar(det){
+  detenido=!!det;clearInterval(temporizador);fechaFin=new Date();
+  const v=pct(),r=rangoDe(v),bono=correctas>=minimoBono(ruta.length),seg=Math.round((Date.now()-t0)/1000),tiempo=`${Math.floor(seg/60)}:${String(seg%60).padStart(2,"0")}`;
+  bono?sonMeta():sonFin();
+  $("desenlace").className="desenlace "+r.clase;
+  $("desenlace").className="desenlace "+(detenido?"no":r.clase);
+  $("desenlace").textContent=bono?`${fmtPct(v)} · Ganaste ${PUNTOS_BONO} puntos`:detenido?`Embarque detenido · ${fmtPct(v)}`:`${fmtPct(v)} de aciertos`;
+  $("finalTexto").textContent=bono?`Tu carga llegó segura con ${correctas} de ${ruta.length} respuestas correctas. Sube tu tarjeta a Classroom para que se registren tus ${PUNTOS_BONO} puntos.`
+    :detenido?`Se rompieron los tres sellos en la pregunta ${paso+1} y la carga quedó retenida. Respondiste bien ${correctas} de ${ruta.length}. Para ganar los ${PUNTOS_BONO} puntos necesitas al menos el ${UMBRAL_BONO}% (${minimoBono(ruta.length)} de ${ruta.length}). Repasa el video y vuelve a intentarlo.`
+    :`Respondiste bien ${correctas} de ${ruta.length}. Para ganar los ${PUNTOS_BONO} puntos necesitas al menos el ${UMBRAL_BONO}% (${minimoBono(ruta.length)} de ${ruta.length}). Repasa el video y revisa tus respuestas abajo.`;
+  $("datos").innerHTML=`<div><span class="rot">Resultado</span><span class="num" style="color:var(--neon)">${fmtPct(v)}</span></div><div><span class="rot">Aciertos</span><span class="num">${correctas} / ${ruta.length}</span></div><div><span class="rot">Puntos extra</span><span class="num" style="color:var(--oro)">${bono?"+"+PUNTOS_BONO:"0"}</span></div><div><span class="rot">Tiempo</span><span class="num">${tiempo}</span></div>`;
+  const h=leerHist(),m=$("marcasFinal");
+  if(h){h.intentos++;if(h.primero===null)h.primero=v;if(h.mejor===null||v>h.mejor)h.mejor=v;guardarHist(h);intentoNum=h.intentos;
+    m.innerHTML=`Intento <b>${h.intentos}</b> · Primer intento <b>${fmtPct(h.primero)}</b> · Mejor <b>${fmtPct(h.mejor)}</b>`;m.classList.remove("oculto")}else m.classList.add("oculto");
+  const lista=$("listaRangos");lista.innerHTML="";
+  RANGOS.forEach(rg=>{const f=document.createElement("div");f.className="r"+(rg===r?" mio":"");f.innerHTML=`<i>${rg.rango}</i><b>${rg.nombre}</b>`+(rg===r?`<span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em">TU RESULTADO</span>`:"");lista.appendChild(f)});
+  const rep=$("repaso");rep.innerHTML="";
+  if(!fallos.length)rep.innerHTML=`<p class="x" style="padding-top:16px">Ruta limpia: todas tus respuestas fueron correctas.</p>`;
+  else{const t=document.createElement("p");t.className="rot-sec";t.textContent=`Para repasar · ${fallos.length}`;rep.appendChild(t);
+    fallos.forEach(f=>{const a=document.createElement("article");a.innerHTML=`<h3></h3><p class="l">Tu respuesta: <span></span></p><p class="l">Correcta: <b></b></p><p class="x"></p>`;a.querySelector("h3").textContent=f.p;a.querySelector(".l span").textContent=f.tuya;a.querySelector("b").textContent=f.buena;a.querySelector(".x").textContent=f.e;rep.appendChild(a)})}
+  ver("final");window.scrollTo({top:0,behavior:"smooth"});generarLamina(v,bono,tiempo);
+}
+function dibujar(v,bono,tiempo){
+  const cv=$("lienzo"),ctx=cv.getContext("2d"),W=cv.width,H=cv.height,nombre=$("nombre").value.trim();
+  const disp='"Space Grotesk", system-ui, sans-serif',mono='"IBM Plex Mono", monospace',acento=bono?"#3BE0C4":v>=60?"#F5C451":"#FF6B5B";
+  ctx.fillStyle="#06121A";ctx.fillRect(0,0,W,H);
+  const halo=ctx.createRadialGradient(W/2,360,40,W/2,360,760);halo.addColorStop(0,acento+"2E");halo.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=halo;ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle="rgba(255,255,255,.10)";ctx.lineWidth=2;ctx.strokeRect(56.5,56.5,W-113,H-113);ctx.textAlign="center";
+  ctx.fillStyle="#86A0AB";ctx.font="500 23px "+mono;ctx.fillText(detenido?"RUTA SEGURA · EMBARQUE DETENIDO":"RUTA SEGURA · QUIZ INICIAL",W/2,140);
+  ctx.fillStyle="#EAF3F5";ctx.font="600 30px "+disp;ctx.fillText("Introducción al SGCS BASC",W/2,186);
+  ctx.fillStyle=acento;ctx.font="700 210px "+disp;ctx.fillText(fmtPct(v),W/2,400);
+  ctx.fillStyle="#86A0AB";ctx.font="500 26px "+mono;ctx.fillText(`${correctas} DE ${ruta.length} RESPUESTAS CORRECTAS`,W/2,452);
+  ctx.strokeStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.moveTo(180,505);ctx.lineTo(W-180,505);ctx.stroke();
+  if(bono){ctx.fillStyle="#F5C451";ctx.font="700 64px "+disp;ctx.fillText(`+${PUNTOS_BONO} PUNTOS`,W/2,590);ctx.fillStyle="#EAF3F5";ctx.font="500 26px "+mono;ctx.fillText("GANADOS PARA EL CURSO",W/2,632)}
+  else{ctx.fillStyle="#EAF3F5";ctx.font="600 36px "+disp;ctx.fillText("Sin puntos extra",W/2,580);ctx.fillStyle="#86A0AB";ctx.font="500 24px "+mono;ctx.fillText(`SE REQUIERE AL MENOS ${UMBRAL_BONO}%`,W/2,624)}
+  ctx.beginPath();ctx.moveTo(180,672);ctx.lineTo(W-180,672);ctx.stroke();
+  ctx.fillStyle="#EAF3F5";let t=50;ctx.font=`600 ${t}px ${disp}`;while(ctx.measureText(nombre).width>W-220&&t>28){t-=2;ctx.font=`600 ${t}px ${disp}`}ctx.fillText(nombre||"Participante",W/2,748);
+  const f=fechaFin||new Date(),fecha=f.toLocaleDateString("es-MX",{day:"2-digit",month:"short",year:"numeric"})+" · "+f.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
+  ctx.fillStyle="#86A0AB";ctx.font="400 23px "+mono;ctx.fillText(`${intentoNum?"INTENTO "+intentoNum+" · ":""}${fecha.toUpperCase()} · ${tiempo}`,W/2,796);
+  ctx.fillStyle="#86A0AB";ctx.font="400 22px "+mono;ctx.fillText("CURSO DE AUDITOR INTERNO BASC · ETAPA 1",W/2,930);
+  ctx.fillStyle="#EAF3F5";ctx.font="500 22px "+mono;ctx.fillText("LOWRISK · mauricio@lowrisk.com.mx · 33 3578 4983",W/2,968);
+  const slug=(nombre||"resultado").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  archivoActual=`ruta-segura-quiz-inicial-${slug}.png`;return cv;
+}
+async function generarLamina(v,bono,tiempo){
+  const img=$("imgFinal"),cargando=$("cargando");img.classList.remove("on");cargando.classList.remove("oculto");cargando.textContent="Generando tarjeta…";
+  try{if(document.fonts&&document.fonts.ready)await document.fonts.ready;const cv=dibujar(v,bono,tiempo);img.onload=()=>{img.classList.add("on");cargando.classList.add("oculto")};img.src=cv.toDataURL("image/png");
+    blobActual=await new Promise(res=>cv.toBlob(res,"image/png"));
+    try{const f=new File([blobActual],archivoActual,{type:"image/png"});$("btnCompartir").classList.toggle("oculto",!(navigator.canShare&&navigator.canShare({files:[f]})))}catch(e){}
+  }catch(e){cargando.textContent="No se pudo generar la tarjeta"}
+}
+function avisar(t){const a=$("aviso");a.textContent=t;a.classList.remove("oculto");clearTimeout(a._t);a._t=setTimeout(()=>a.classList.add("oculto"),2600)}
+let downloadsP=null;try{downloadsP=window.claude&&window.claude.use?window.claude.use("downloads"):null}catch(e){downloadsP=null}
+async function bajar(){
+  if(!blobActual){avisar("Aún se genera la tarjeta");return}
+  const dl=downloadsP?await downloadsP:null;
+  if(dl){try{await dl.save({filename:archivoActual,data:blobActual});avisar("Tarjeta guardada")}catch(e){if(!e||e.code!=="declined")avisar("No se pudo guardar")}return}
+  const url=URL.createObjectURL(blobActual),a=document.createElement("a");a.href=url;a.download=archivoActual;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),4000);avisar("Tarjeta descargada");
+}
+async function compartir(){if(!blobActual)return;try{await navigator.share({files:[new File([blobActual],archivoActual,{type:"image/png"})],title:"Ruta Segura · Quiz inicial"})}catch(e){if(e&&e.name!=="AbortError")bajar()}}
+function temaActual(){const a=document.documentElement.getAttribute("data-theme");return a||(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}
+function pintarTema(){$("btnTema").textContent=temaActual()==="dark"?"☀ Modo claro":"☾ Modo oscuro"}
+$("btnTema").onclick=()=>{const n=temaActual()==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",n);try{localStorage.setItem("rutaSegura-tema",n)}catch(e){}pintarTema()};
+$("btnJugar").addEventListener("click",iniciar);
+$("btnOtra").addEventListener("click",()=>{iniciar();window.scrollTo({top:0,behavior:"smooth"})});
+$("btnSeguir").addEventListener("click",avanzar);$("btnBajar").addEventListener("click",bajar);$("btnCompartir").addEventListener("click",compartir);
+$("btnSonido").addEventListener("click",()=>{sonidoOn=!sonidoOn;$("btnSonido").textContent=sonidoOn?"SONIDO ON":"SONIDO OFF";if(sonidoOn)bip([700],.07)});
+$("nombre").addEventListener("input",()=>{$("btnJugar").disabled=!$("nombre").value.trim()});
+$("nombre").addEventListener("keydown",e=>{if(e.key==="Enter")iniciar()});
+document.addEventListener("keydown",e=>{if(activa&&["1","2","3","4"].includes(e.key)){const b=$("ops").children[Number(e.key)-1];if(b)b.click()}else if(e.key==="Enter"&&!$("btnSeguir").classList.contains("oculto")&&document.activeElement!==$("btnSeguir"))avanzar()});
+(function(){
+  $("minimo").textContent=`${minimoBono(BANCO.length)} de ${BANCO.length} correctas`;pintarTema();
+  const h=leerHist();if(h&&h.intentos>0){const m=$("marcas");m.innerHTML=`Intentos <b>${h.intentos}</b> · Primer intento <b>${fmtPct(h.primero)}</b> · Mejor <b>${fmtPct(h.mejor)}</b>`;m.classList.remove("oculto")}
+})();
+</script>
+</body>
+</html>
